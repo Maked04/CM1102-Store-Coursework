@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/productPage.css') }}">
+</head>
+<body>
+<a href="basket">BASKET</a>
+<div id="ProductColumn">
+	<table>
+		<tr>
+		{% for product in products %}
+		{%- if loop.index % 4 == 0 %}
+		</tr>
+		<tr>
+		{% endif %}
+		<td>
+			<h3> {{product.name}} </h3>
+			<p> Price: £{{product.price}} </p>
+			<img src={{ product.picture }} width=100px height=100px>
+			<form method="post">
+				<label for="quantity">Quantity</label>
+				<input type="number" name="quantity" min=1 required>
+				<input type="submit" value="Add To Basket" name={{product.id}}>
+			</form>
+
+		</td>
+		{% endfor %}
+		</tr>
+	</table>
+</div>
+</body>

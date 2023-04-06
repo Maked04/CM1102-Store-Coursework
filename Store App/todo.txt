@@ -1,0 +1,14 @@
+TODO
+
+Display total basket cost
+Button to clear basket
+Checkout button takes you to page to fill in detail and OPTION to login
+
+once "valid" details and buy pressed:
+ --> Show confirmation page and/or send email
+ --> Have account creation/login setuo
+ --> On profile page have link to page with all orders made
+
+
+DONE
+If you set the quantity to 0 in the basket then remove it from the session basket entirely. 

@@ -1,0 +1,17 @@
+<a href="/">CONTINUE SHOPPING</a>
+
+{% for item, quantity in basket.items() %}
+<h3> {{item.name}} </h3>
+<p> Price: £{{item.price}} </p>
+<img src={{ item.picture }} width=100px height=100px>
+<p> x{{quantity}} </p>
+<form method="post" name={{item.id}}>
+<label for="cars">Qty:</label>
+<select name="quantity" id="quantity">
+	{% for i in range(quantity, -1, -1) %}
+		<option value={{i}}>{{i}}</option>
+	{% endfor %}
+</select> 
+<input type="submit" value="Save" name={{item.id}}>
+</form >
+{% endfor %} 
