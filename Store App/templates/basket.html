@@ -1,11 +1,31 @@
-<a href="/">CONTINUE SHOPPING</a>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
+{% block title %}
+Paraphonealia
+{% endblock %}
+
+
+{% block navbar %}
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+		<a class="navbar-brand" href="{{ url_for('index') }}">Products</a>
+		<a class="navbar-brand" href="{{ url_for('basket') }}">Basket</a>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+<input type ="submit" name="ClearBasket" value="Clear Basket">
+</form>
 {% for item, quantity in basket.items() %}
 <h3> {{item.name}} </h3>
 <p> Price: £{{item.price}} </p>
 <img src={{ item.picture }} width=100px height=100px>
 <p> x{{quantity}} </p>
 <form method="post" name={{item.id}}>
+<input type="hidden" name="product_id" value={{item.id}}>
 <label for="cars">Qty:</label>
 <select name="quantity" id="quantity">
 	{% for i in range(quantity, -1, -1) %}
@@ -14,4 +34,9 @@
 </select> 
 <input type="submit" value="Save" name={{item.id}}>
 </form >
-{% endfor %} 
+{% endfor %}
+
+<p> Basket Total: {{total}} </p>
+<a href="checkout" >Checkout!</a>
+{% endblock %}
+

@@ -1,14 +1,19 @@
+MID WAY THROUGH
+
+Form error message only working when submitted --> we want prompts as you go through form
+
 TODO
 
-Display total basket cost
-Button to clear basket
+Can change item quantity in basket from 0-10 then if more allows optional field to enter custom amount
 Checkout button takes you to page to fill in detail and OPTION to login
 
 once "valid" details and buy pressed:
  --> Show confirmation page and/or send email
- --> Have account creation/login setuo
+ --> Have account creation/login setup
  --> On profile page have link to page with all orders made
 
 
 DONE
 If you set the quantity to 0 in the basket then remove it from the session basket entirely. 
+Display total basket cost
+Button to clear basket
