@@ -17,3 +17,5 @@ DONE
 If you set the quantity to 0 in the basket then remove it from the session basket entirely. 
 Display total basket cost
 Button to clear basket
+Add href from name/picture that takes you to product page
+Add sort/search bar to main products page

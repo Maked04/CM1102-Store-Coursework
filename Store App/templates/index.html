@@ -14,7 +14,7 @@ Paraphonealia
 {% block navbar %}
     <nav class="navbar navbar-inverse" role="navigation">
         <div class="container">
-		<a class="navbar-brand" href="{{ url_for('index') }}">Products</a>
+		<a class="navbar-brand" href="{{ url_for('index') }}">Shop</a>
 		<a class="navbar-brand" href="{{ url_for('basket') }}">Basket</a>
         </div>
     </nav>
@@ -24,15 +24,37 @@ Paraphonealia
 <div id="ProductColumn">
 	<table>
 		<tr>
+			<td>
+			<div class="SortBar">
+				<form method="post">
+					<select name="SortBar">
+						<option value="Standard">Standard</option>
+						<option value="Price">Price</option>
+						<option value="Name">Name</option>
+					</select> 
+					<input type="submit" value="Sort" name="ApplySort">
+				</form>
+			</div>
+			</td>
+			<td>
+			<div class="SearchBar">
+				<form method="post">
+					<input type="text" name="SearchBar">
+					<input type="submit" value="Search" name="ApplySearch">
+				</form>
+			</div>
+			</td>
+		</tr>
+		<tr>
 		{% for product in products %}
 		{%- if loop.index % 4 == 0 %}
 		</tr>
 		<tr>
 		{% endif %}
 		<td>
-			<h3> {{product.name}} </h3>
+			<a href="productPage/{{product.id}}/{{product.name}}"><h3> {{product.name}} </h3></a>
 			<p> Price: £{{product.price}} </p>
-			<img src={{ product.picture }} width=100px height=100px>
+			<a href="productPage/{{product.id}}/{{product.name}}"><img src={{ product.picture }} width=100px height=100px></a>
 			<form method="post">
 				<input type="hidden" name="product_id" value={{product.id}}>
 				<label for="quantity">Quantity</label>

@@ -5,11 +5,15 @@
 Paraphonealia
 {% endblock %}
 
+{% block styles %}
+{{super()}}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/productPage.css') }}">
+{% endblock %}
 
 {% block navbar %}
-    <nav class="navbar navbar-inverse" role="navigation">
+    <nav class="navbar navbar-inverse" role="navigation" style="margin-bottom: 0px;">
         <div class="container">
-		<a class="navbar-brand" href="{{ url_for('index') }}">Products</a>
+		<a class="navbar-brand" href="{{ url_for('index') }}">Shop</a>
 		<a class="navbar-brand" href="{{ url_for('basket') }}">Basket</a>
         </div>
     </nav>
@@ -19,24 +23,23 @@ Paraphonealia
 <form method="post">
 <input type ="submit" name="ClearBasket" value="Clear Basket">
 </form>
-{% for item, quantity in basket.items() %}
-<h3> {{item.name}} </h3>
-<p> Price: £{{item.price}} </p>
-<img src={{ item.picture }} width=100px height=100px>
-<p> x{{quantity}} </p>
-<form method="post" name={{item.id}}>
-<input type="hidden" name="product_id" value={{item.id}}>
-<label for="cars">Qty:</label>
+{% for product, quantity in basket.items() %}
+<a href="productPage/{{product.id}}/{{product.name}}"><h3> {{product.name}} </h3></a>
+<p> Price: £{{product.price}} </p>
+<a href="productPage/{{product.id}}/{{product.name}}"><img src={{ product.picture }} width=100px height=100px></a>
+<form method="post" name={{product.id}}>
+<input type="hidden" name="product_id" value={{product.id}}>
+<label for="quantity">Qty:</label>
 <select name="quantity" id="quantity">
 	{% for i in range(quantity, -1, -1) %}
 		<option value={{i}}>{{i}}</option>
 	{% endfor %}
 </select> 
-<input type="submit" value="Save" name={{item.id}}>
+<input type="submit" value="Save" name={{product.id}}>
 </form >
 {% endfor %}
 
 <p> Basket Total: {{total}} </p>
-<a href="checkout" >Checkout!</a>
+<a href="checkout" class="Button_link">Continue to Checkout</a>
 {% endblock %}
 

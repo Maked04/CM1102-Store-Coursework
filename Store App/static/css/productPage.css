@@ -1,10 +1,27 @@
+.navbar {
+	margin-bottom: 0px;
+	box-shadow: none;
+}
 #ProductColumn {
   border: 5px solid;
+  border-top: none;
+  border-bottom: none;
   margin: auto;
+  margin-top: none;
   width: 50%;
-  padding: 10px;
 }
 
-td {
+#ProductColumn td {
 	padding: 10px;
+}
+
+a {
+	color: black;
+}
+
+.Button_link {
+	padding: 10px 10px;
+	border: 1px solid #696969;
+	background-color: #DCDCDC;
+	border-radius: 10%;
 }

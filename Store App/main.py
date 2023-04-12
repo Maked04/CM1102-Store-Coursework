@@ -35,22 +35,48 @@ def get_basket_total(basket):
 
 @app.route('/', methods=["GET", "POST"])
 def index():
+    apply_sort = False
+    apply_search = False
+    sort_type = None
+    search_query = None
     if 'Basket' not in session:
         session['Basket'] = {}
     if request.method == "POST":
-        quantity, product_id = None, None
-        if 'quantity' in request.form:
-            quantity = request.form['quantity']
-        if 'product_id' in request.form:
-            product_id = request.form['product_id']
-        if quantity is not None and product_id is not None:
-            if product_id in session['Basket']:
-                session['Basket'][product_id] = int(session['Basket'][product_id]) + int(quantity)
-            else:
-                session['Basket'][product_id] = quantity
-        
-    products = Product.query.all()
+        print(request.form)
+        if 'SortBar' in request.form:
+            apply_sort = True
+            sort_type = request.form['SortBar']
+        elif 'SearchBar' in request.form:
+            apply_search = True
+            search_query = request.form['SearchBar']
+        else:
+            quantity, product_id = None, None
+            if 'quantity' in request.form:
+                quantity = request.form['quantity']
+            if 'product_id' in request.form:
+                product_id = request.form['product_id']
+            if quantity is not None and product_id is not None:
+                if product_id in session['Basket']:
+                    session['Basket'][product_id] = int(session['Basket'][product_id]) + int(quantity)
+                else:
+                    session['Basket'][product_id] = quantity
+    if apply_sort:
+        if sort_type == "Price":
+            products = Product.query.order_by(Product.price).all()
+        elif sort_type == "Standard":
+            products = Product.query.all()
+        elif sort_type == "Name":
+            products = Product.query.order_by(Product.name).all()
+    elif apply_search:
+        products = Product.query.filter(Product.name.contains(search_query))
+    else:
+        products = Product.query.all()
     return render_template("index.html", products=products)
+
+@app.route('/productPage/<product_id>/<product_name>', methods=["GET", "POST"])
+def productPage(product_id, product_name):
+    product = Product.get_product_from_id(int(product_id))
+    return render_template("productPage.html", product=product)
 
 @app.route('/basket', methods=["GET", "POST"])
 def basket():
@@ -115,9 +141,9 @@ class Product(db.Model):
 if __name__ == "__main__":
     db.drop_all()
     db.create_all()
-    Product.add_item("Black Watch Strap", 49, "static/product_pics/Black_Strap.jpg")
-    Product.add_item("Brown Leather strap", 59, "static/product_pics/Brown_Leather_Strap.jpg")
-    Product.add_item("Silver Link Watch Strap", 69, "static/product_pics/Silver_Link_Strap.jpeg")
-    Product.add_item("Blue Watch Strap", 79, "static/product_pics/Blue_Strap.jpg")
+    Product.add_item("Brown Leather strap", 59, "/static/product_pics/Brown_Leather_Strap.jpg")
+    Product.add_item("Blue Watch Strap", 79, "/static/product_pics/Blue_Strap.jpg")
+    Product.add_item("Black Watch Strap", 49, "/static/product_pics/Black_Strap.jpg")
+    Product.add_item("Silver Link Watch Strap", 69, "/static/product_pics/Silver_Link_Strap.jpeg")
     
     app.run(debug=True)
