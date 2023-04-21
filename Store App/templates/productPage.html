@@ -5,6 +5,11 @@
 Paraphonealia
 {% endblock %}
 
+{% block styles %}
+{{super()}}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/productPage.css') }}">
+{% endblock %}
+
 {% block navbar %}
     <nav class="navbar navbar-inverse" role="navigation">
         <div class="container">
@@ -18,17 +23,13 @@ Paraphonealia
 {% endblock %}
 
 {% block content %}
+<h3> {{product.name}} </h3>
+<p> Price: £{{product.price}} </p>
+<img src={{ product.picture }} width=500px height=500px>
 <form method="post">
-{{ form.csrf_token }}
-{{ form.cardNumber.label }}
-{{ form.cardNumber() }} </br>
- {% for field, errors in form.errors.items() %}
-    <small class="form-text text-muted ">
-        {{ ', '.join(errors) }}
-    </small>
-{% endfor %}
-</br>
-{{ form.pay() }}
+	<input type="hidden" name="product_id" value={{product.id}}>
+	<label for="quantity">Quantity</label></br>
+	<input type="number" name="quantity" min=1 required></br>
+	<input type="submit" value="Add To Basket" name={{product.id}}>
 </form>
-<p> Basket Total: {{total}} </p>
 {% endblock %}

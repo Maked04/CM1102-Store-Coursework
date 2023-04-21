@@ -5,13 +5,19 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Length
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.sqlalchemy import SQLAlchemy
-#from form_helper import FormHelper
+from form_helper import FormHelper
 import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'top secret!'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
-UPLOAD_FOLDER = 'static/product_pics'
+
+PRODUCT_UPLOAD_FOLDER = 'static/product_pics'
+PROFILE_UPLOAD_FOLDER = 'static/profile_pics'
+default_pic = 'static/profile_pics/blank-user.png'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+form_helper = FormHelper(PROFILE_UPLOAD_FOLDER, ALLOWED_EXTENSIONS)
+
 bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 
@@ -42,7 +48,6 @@ def index():
     if 'Basket' not in session:
         session['Basket'] = {}
     if request.method == "POST":
-        print(request.form)
         if 'SortBar' in request.form:
             apply_sort = True
             sort_type = request.form['SortBar']
@@ -68,7 +73,7 @@ def index():
         elif sort_type == "Name":
             products = Product.query.order_by(Product.name).all()
     elif apply_search:
-        products = Product.query.filter(Product.name.contains(search_query))
+        products = Product.query.filter(Product.name.ilike("%"+search_query+"%"))
     else:
         products = Product.query.all()
     return render_template("index.html", products=products)
@@ -113,6 +118,94 @@ def checkout():
     
     return render_template("checkout.html", basket=basket, total=total, form=form)
 
+# ACCOUNT RELATED ROUTES
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        # Check for valid login here
+        user = User.get_user_from_username(username)
+        if user is not None:
+            if user.verify_password(password):
+                session['logged'] = True
+                session['username'] = username
+                return redirect(url_for('index'))
+    return render_template('login.html')
+
+@app.route('/create_account', methods=['GET', 'POST'])
+def create_account():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        # Check if an account with this username is already created
+        user = User.get_user_from_username(username)
+        if user is None:
+            User.register(username, password, default_pic)
+            return redirect(url_for('login'))
+    return render_template('create_account.html')
+
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    current_pic = None
+    if 'logged' in session:
+        user = User.get_user_from_username(session['username'])
+        current_pic = user.profile_pic
+        
+        profile_pic = form_helper.upload_file(request)
+        if profile_pic is not None:
+            # Store old profile pic
+            old_profile_pic = user.profile_pic
+
+            # Add new profile pic
+            User.update_profile_pic(user, profile_pic)
+
+            # Remove old profile pic
+            if os.path.exists(old_profile_pic):
+                os.remove(old_profile_pic)
+            else:
+                print("The file does not exist")
+
+            # Redirect to refresh page so current pic no shows up on profile
+            return redirect(url_for('profile'))
+
+        print(current_pic)
+        return render_template('profile.html', current_pic=current_pic, logged=("logged" in session))
+        
+    return redirect(url_for('login'))
+
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(16), index=True, unique=True)
+    password_hash = db.Column(db.String(64)) 
+    profile_pic = db.Column(db.String(512))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    @staticmethod
+    def register(username, password, profile_pic):
+        user = User(username=username, profile_pic=profile_pic)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+
+    def update_profile_pic(user, profile_pic):
+        user.profile_pic = profile_pic
+        db.session.commit()
+
+    def get_user_from_username(username):
+        user = User.query.filter_by(username=username).first()
+        return user
+        
+    def __repr__(self):
+        return '<User {0}>'.format(self.username)
+
 class Product(db.Model):
     __tablename__ = 'products'
     id = db.Column(db.Integer, primary_key=True)
@@ -139,11 +232,11 @@ class Product(db.Model):
         return (self.name+"\nPrice: "+str(self.price)+" ID: "+str(self.id))
     
 if __name__ == "__main__":
-    db.drop_all()
+    #db.drop_all()
     db.create_all()
-    Product.add_item("Brown Leather strap", 59, "/static/product_pics/Brown_Leather_Strap.jpg")
-    Product.add_item("Blue Watch Strap", 79, "/static/product_pics/Blue_Strap.jpg")
-    Product.add_item("Black Watch Strap", 49, "/static/product_pics/Black_Strap.jpg")
-    Product.add_item("Silver Link Watch Strap", 69, "/static/product_pics/Silver_Link_Strap.jpeg")
+    #Product.add_item("Brown Leather strap", 59, "/static/product_pics/Brown_Leather_Strap.jpg")
+    #Product.add_item("Blue Watch Strap", 79, "/static/product_pics/Blue_Strap.jpg")
+    #Product.add_item("Black Watch Strap", 49, "/static/product_pics/Black_Strap.jpg")
+    #Product.add_item("Silver Link Watch Strap", 69, "/static/product_pics/Silver_Link_Strap.jpeg")
     
     app.run(debug=True)

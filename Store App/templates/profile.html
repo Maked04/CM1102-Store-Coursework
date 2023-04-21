@@ -1,9 +1,7 @@
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}
-Paraphonealia
-{% endblock %}
+{% block title %}Relational Database Example{% endblock %}
 
 {% block navbar %}
     <nav class="navbar navbar-inverse" role="navigation">
@@ -18,17 +16,12 @@ Paraphonealia
 {% endblock %}
 
 {% block content %}
-<form method="post">
-{{ form.csrf_token }}
-{{ form.cardNumber.label }}
-{{ form.cardNumber() }} </br>
- {% for field, errors in form.errors.items() %}
-    <small class="form-text text-muted ">
-        {{ ', '.join(errors) }}
-    </small>
-{% endfor %}
-</br>
-{{ form.pay() }}
-</form>
-<p> Basket Total: {{total}} </p>
+    <h1>EDIT PROFILE</h1>
+	<h3> Current pic </h3>
+	<img src={{ current_pic }} width=170px height=170px>
+	<form method="post" enctype=multipart/form-data>
+	<label for="file">Upload Profile Pic:</label>
+	<input type="file" id="myfile" name="file"> 
+	<input type ="submit" value="uploadpic"><br><br>
+	</form>
 {% endblock %}

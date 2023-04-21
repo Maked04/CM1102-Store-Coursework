@@ -1,9 +1,7 @@
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}
-Paraphonealia
-{% endblock %}
+{% block title %}Relational Database Example{% endblock %}
 
 {% block navbar %}
     <nav class="navbar navbar-inverse" role="navigation">
@@ -18,17 +16,12 @@ Paraphonealia
 {% endblock %}
 
 {% block content %}
-<form method="post">
-{{ form.csrf_token }}
-{{ form.cardNumber.label }}
-{{ form.cardNumber() }} </br>
- {% for field, errors in form.errors.items() %}
-    <small class="form-text text-muted ">
-        {{ ', '.join(errors) }}
-    </small>
-{% endfor %}
-</br>
-{{ form.pay() }}
-</form>
-<p> Basket Total: {{total}} </p>
+    <h1>LOGIN SUCKER</h1>
+	<form method="post">
+	<label for="username">Enter username:</label><br>
+	<input type="text" id="username" name="username"><br>
+	<label for="password">Enter password:</label><br>
+	<input type="password" id="password" name="password"><br><br>
+	<input type ="submit" value="Login">
+	</form>
 {% endblock %}

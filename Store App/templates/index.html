@@ -16,6 +16,9 @@ Paraphonealia
         <div class="container">
 		<a class="navbar-brand" href="{{ url_for('index') }}">Shop</a>
 		<a class="navbar-brand" href="{{ url_for('basket') }}">Basket</a>
+		<a class="navbar-brand" href="{{ url_for('login') }}">Login</a>
+	    <a class="navbar-brand" href="{{ url_for('create_account') }}">Create Account</a>
+		<a class="navbar-brand" href="{{ url_for('profile') }}">Profile</a>
         </div>
     </nav>
 {% endblock %}
@@ -39,7 +42,7 @@ Paraphonealia
 			<td>
 			<div class="SearchBar">
 				<form method="post">
-					<input type="text" name="SearchBar">
+					<input type="text" name="SearchBar" value="{{ request.form['SearchBar'] }}">
 					<input type="submit" value="Search" name="ApplySearch">
 				</form>
 			</div>
