@@ -1,0 +1,27 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Relational Database Example{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+		<a class="navbar-brand" href="{{ url_for('index') }}">Shop</a>
+		<a class="navbar-brand" href="{{ url_for('basket') }}">Basket</a>
+		<a class="navbar-brand" href="{{ url_for('login') }}">Login</a>
+	    <a class="navbar-brand" href="{{ url_for('create_account') }}">Create Account</a>
+		<a class="navbar-brand" href="{{ url_for('profile') }}">Profile</a>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <h1>EDIT PROFILE</h1>
+	<h3> Current pic </h3>
+	<img src="static/profile_pics/{{ current_pic }}" width=170px height=170px>
+	<form method="post" enctype=multipart/form-data>
+	<label for="file">Upload Profile Pic:</label>
+	<input type="file" id="myfile" name="file"> 
+	<input type ="submit" value="uploadpic"><br><br>
+	</form>
+{% endblock %}

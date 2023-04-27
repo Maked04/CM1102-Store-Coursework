@@ -3,13 +3,15 @@ MID WAY THROUGH
 Form error message only working when submitted --> we want prompts as you go through form
 
 TODO
+FROM VIDEO - Setup custom json field to store order details then add into customerorder table which links to user
 Account stuff
-- Add all account stuff from chatapp DONE
 - Alter account table to have relation to product table (Probably add order table that contains products and links to account)
 - Profile displays previous orders
 
+account links to orders table
+order has shipping/billing info
 
-Add to basket functionality for each product page
+
 Can change item quantity in basket from 0-10 then if more allows optional field to enter custom amount
 Checkout button takes you to page to fill in detail and OPTION to login
 
@@ -20,8 +22,10 @@ once "valid" details and buy pressed:
 
 
 DONE
+Add all account stuff from chatapp DONE
 If you set the quantity to 0 in the basket then remove it from the session basket entirely. 
 Display total basket cost
 Button to clear basket
 Add href from name/picture that takes you to product page
 Add sort/search bar to main products page
+Add to basket functionality for each product page 

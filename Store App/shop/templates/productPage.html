@@ -1,0 +1,35 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+Paraphonealia
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/productPage.css') }}">
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+		<a class="navbar-brand" href="{{ url_for('index') }}">Shop</a>
+		<a class="navbar-brand" href="{{ url_for('basket') }}">Basket</a>
+		<a class="navbar-brand" href="{{ url_for('login') }}">Login</a>
+	    <a class="navbar-brand" href="{{ url_for('create_account') }}">Create Account</a>
+		<a class="navbar-brand" href="{{ url_for('profile') }}">Profile</a>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+<h3> {{product.name}} </h3>
+<p> Price: £{{product.price}} </p>
+<img src={{ product.picture }} width=500px height=500px>
+<form method="post">
+	<input type="hidden" name="product_id" value={{product.id}}>
+	<label for="quantity">Quantity</label></br>
+	<input type="number" name="quantity" min=1 required></br>
+	<input type="submit" value="Add To Basket" name={{product.id}}>
+</form>
+{% endblock %}
