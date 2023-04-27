@@ -24,12 +24,15 @@
 {% endblock %}
 
 {% block content %}
-    <h1>LOGIN SUCKER</h1>
-	<form method="post">
-	<label for="username">Enter username:</label><br>
-	<input type="text" id="username" name="username"><br>
-	<label for="password">Enter password:</label><br>
-	<input type="password" id="password" name="password"><br><br>
-	<input type ="submit" value="Login">
+<div class="text-center h1 text-danger">Login</div>
+<div class="container">
+	{% from "_formhelpers.html" import render_field %}
+	<form method=post>
+		<div class="form-group">
+			{{ render_field(form.username, class="form-control") }}
+			{{ render_field(form.password, class="form-control") }}
+		</div>
+		<p><input type=submit value="Login" class="btn btn-info mt-2"></p>
 	</form>
+</div>
 {% endblock %}

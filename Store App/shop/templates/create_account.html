@@ -16,12 +16,18 @@
 {% endblock %}
 
 {% block content %}
-    <h1>CREATE ACCOUNT SUCKER</h1>
-	<form method="post">
-	<label for="username">Enter username:</label><br>
-	<input type="text" id="username" name="username"><br>
-	<label for="password">Enter password:</label><br>
-	<input type="password" id="password" name="password"><br><br>
-	<input type ="submit" value="Create Account">
+<div class="text-center h1 text-danger"> Register</div>
+<div class="container">
+	{% from "_formhelpers.html" import render_field %}
+	<form method=post enctype="multipart/form-data">
+		<div class="form-group">
+			{{ render_field(form.username, class="form-control") }}
+			{{ render_field(form.email, class="form-control") }}
+			{{ render_field(form.password, class="form-control") }}
+			{{ render_field(form.confirm, class="form-control") }}
+			{{ render_field(form.profile_pic, class="form-control") }}
+		</div>
+		<p><input type=submit value="Create account" class="btn btn-info mt-2"></p>
 	</form>
+</div>
 {% endblock %}

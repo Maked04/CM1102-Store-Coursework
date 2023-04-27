@@ -17,11 +17,24 @@
 
 {% block content %}
     <h1>EDIT PROFILE</h1>
+	<div class="container" id="customer_orders">
+	<h3> Placed Orders </h3>
+	{% for order_id in orders.keys() %}
+    <h4> Order num: {{order_id}} </h4>
+    {% for product, quantity in orders[order_id].items() %}
+    <p> {{product.name}} x{{quantity}} </p>
+	{% endfor %}
+	{% endfor %}
+	</div>
+	
 	<h3> Current pic </h3>
 	<img src="static/profile_pics/{{ current_pic }}" width=170px height=170px>
-	<form method="post" enctype=multipart/form-data>
-	<label for="file">Upload Profile Pic:</label>
-	<input type="file" id="myfile" name="file"> 
-	<input type ="submit" value="uploadpic"><br><br>
+	{% from "_formhelpers.html" import render_field %}
+	<form method=post enctype="multipart/form-data" >
+		<div class="form-group">
+			{{ render_field(form.profile_pic) }}
+		</div>
+		</br>
+		<p><input type=submit value="Upload pic"></p>
 	</form>
 {% endblock %}

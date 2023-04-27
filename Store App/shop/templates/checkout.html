@@ -18,17 +18,15 @@ Paraphonealia
 {% endblock %}
 
 {% block content %}
-<form method="post">
-{{ form.csrf_token }}
-{{ form.cardNumber.label }}
-{{ form.cardNumber() }} </br>
- {% for field, errors in form.errors.items() %}
-    <small class="form-text text-muted ">
-        {{ ', '.join(errors) }}
-    </small>
-{% endfor %}
-</br>
-{{ form.pay() }}
+<div class="text-center h1 text-danger">Checkout</div>
+<div class="container">
+{% from "_formhelpers.html" import render_field %}
+<form method=post enctype="multipart/form-data">
+	<div class="form-group">
+		{{ render_field(form.card_number, class="form-control") }}
+	</div>
+  <p><input type=submit value="Pay" class="btn btn-info mt-2"></p>
 </form>
 <p> Basket Total: {{total}} </p>
+</div>
 {% endblock %}
