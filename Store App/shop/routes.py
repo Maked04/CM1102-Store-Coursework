@@ -1,5 +1,5 @@
 from shop import app, db
-from .models import Product, User, CustomerOrder
+from .models import Product, User, Order, OrderItem, Customer
 from flask import render_template, flash, session, redirect, url_for, request, json
 from .form_helper import FormHelper
 from .forms import CheckoutForm, LoginForm, CreateAccountForm, EditProfileForm
@@ -13,28 +13,35 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 form_helper = FormHelper(PROFILE_UPLOAD_FOLDER, ALLOWED_EXTENSIONS)
 
 def get_orders_into_display_format(user_id):
-    customer_orders = db.session.query(CustomerOrder).join(User).filter(User.id == user_id).all()
+    # Get customers associated with user_id
+    user_customers = db.session.query(Customer).join(User).filter(User.id == user_id).all()
+    # Get orders assoicated with user customers
+    user_customer_orders = [db.session.query(Order).join(Customer).filter(Customer.id == user_customer.id).all() for user_customer in user_customers]
     orders = {}
-    for customer_order in customer_orders:
-        order_num = customer_order.id
-        orders[order_num] = {}
-        order_info = json.loads(customer_order.order)["order_items"]
-        for item in order_info:
-            product_id = item['product_id']
-            quantity = item['quantity']
-            product = Product.get_product_from_id(product_id)
-            orders[order_num][product] = quantity
-            
+    for customer_orders in user_customer_orders:
+        # Loops through all the orders for a specific customer
+        for order in customer_orders:
+            order_num = order.id
+            orders[order_num] = {}
+            items = db.session.query(OrderItem).join(Order).filter(Order.id == order_num).all()
+            for item in items:
+                # Add stuff for discount here if functionality is added
+                product = Product.get_product_from_id(item.product_id)
+                orders[order_num][product] = item.quantity
+              
     return orders
 
-    # ["order_id": {product: quantity for each item)]
-    '''
-    for order_id in order.keys():
-    <h4> Order num: {{order_id}} </h4>
-    for product, quantity in order[order_id].items():
-    <p> product x quantity
-    '''
-
+def get_order_items(basket):
+    # format wanted is [{"product_id": , "price": , "quantity": , "discount": }, {}]
+    items = []
+    for product_id, quantity in basket.items():
+        product = Product.get_product_from_id(product_id)
+        # No discount yet but if there is one add here
+        discount = None
+        if discount is None:
+            items.append({"product_id": product.id, "price": product.price, "quantity": quantity, "discount": discount})
+    return items
+                
 def get_basket():
     basket = []
     if 'Basket' in session:
@@ -109,6 +116,12 @@ def search(query):
 
     return json.dumps(points)
 
+@app.route('/orders')
+def orders():
+    orders = db.session.query(Order).all()
+    print(orders)
+    return "slut"
+
 @app.route('/productPage/<product_id>/<product_name>', methods=["GET", "POST"])
 def productPage(product_id, product_name):
     if request.method == "POST":
@@ -152,14 +165,26 @@ def basket():
 @app.route('/checkout', methods=["GET", "POST"])
 def checkout():
     form = CheckoutForm(request.form)
+    items = None
     if request.method == 'POST' and form.validate():
+        if 'Basket' in session:
+            basket = session['Basket']
+            if len(basket) > 0:
+                items = get_order_items(basket)
         if 'logged' in session:
-            basket_as_json = get_order_as_json()
             user = User.get_user_from_username(session['username'])
             if user is not None:
-                if basket_as_json is not None:
-                    CustomerOrder.add_order(basket_as_json, user.id)
+                if items is not None:
+                    customer_id = Customer.add_customer(form.card_number.data, user.id)
+                    Order.add_order(customer_id, items)
+                    #order_id = Order.add_order(user.id, items)
                     flash('Order successfull')
+                    return redirect(url_for('profile'))
+        else:
+            # If not logged in
+            if items is not None:
+                customer_id = Customer.add_customer(form.card_number.data, None)
+                Order.add_order(customer_id, items)
                                         
     basket = get_basket()
     total = get_basket_total(basket)

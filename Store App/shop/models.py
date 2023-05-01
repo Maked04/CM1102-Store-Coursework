@@ -3,27 +3,13 @@ from flask import json
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class JsonEncodedDict(db.TypeDecorator):
-    impl = db.Text
-    def process_bind_param(self, value, dialect):
-        if value is None:
-            return '{}'
-        else:
-            return json.dumps(value)
-
-    def process_result_param(self, value, dialect):
-        if value is None:
-            return {}
-        else:
-            return json.loads(value)
-
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(16), index=True, unique=True)
     password_hash = db.Column(db.String(64)) 
     profile_pic = db.Column(db.String(512))
-    order = db.relationship('CustomerOrder', backref='user', lazy=True)
+    order = db.relationship('Customer', backref='user', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -48,28 +34,73 @@ class User(db.Model):
         
     def __repr__(self):
         return '<User {0}>'.format(self.username)
-    
 
-class CustomerOrder(db.Model):
+class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    order = db.Column(JsonEncodedDict)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
-        nullable=True)
-    
-    def add_order(order, user_id):
-        order = CustomerOrder(order=order, user_id=user_id)
+    card_number = db.Column(db.String(16))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    order = db.relationship('Order', backref='customer', lazy=True)
+
+    def add_customer(card_number, user_id):
+        if user_id is not None:
+            customer = Customer(card_number=card_number, user_id=user_id)
+        else:
+            customer = Customer(card_number=card_number)
+
+        db.session.add(customer)
+        db.session.commit()
+
+        return customer.id
+        
+
+class OrderItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    price = db.Column(db.Float)
+    quantity = db.Column(db.Integer)
+    discount = db.Column(db.Float, nullable=True)
+
+    def add_order_item(order_id, product_id, price, quantity, discount):
+        if discount is not None:
+            order_item = OrderItem(order_id=order_id, product_id=product_id, price=price, quantity=quantity, discount=discount)
+        else:
+            order_item = OrderItem(order_id=order_id, product_id=product_id, price=price, quantity=quantity)
+
+        db.session.add(order_item)
+        db.session.commit()
+
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    #user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
+    order_item = db.relationship('OrderItem', backref='order', lazy=True)
+
+    def add_order(customer_id, items):
+        order = Order(customer_id=customer_id)
         db.session.add(order)
         db.session.commit()
-        
+        Order.add_order_items(order.id, items)
+        return order.id
+
+    def add_order_items(order_id, items):
+        # Function is within Order so can only be called within Order context
+        # form is [{"product_id": , "price": , "quantity": , "discount": }, {}]
+        for item in items: 
+            OrderItem.add_order_item(order_id, item["product_id"], item["price"], item["quantity"], item["discount"])
+
     def __repr__(self):
-        return '<CustomerOrder %r>' % self.order
-
-
+        return '<Order %r>' % self.customer_id
+        
+    
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32), index=True, unique=True)
     price = db.Column(db.Float) 
     picture = db.Column(db.String(512))
+    order_item = db.relationship('OrderItem', backref='product', lazy=True)
+
 
     @staticmethod
     def add_item(name, price, picture):
