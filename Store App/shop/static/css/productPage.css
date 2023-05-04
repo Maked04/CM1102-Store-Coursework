@@ -31,3 +31,64 @@ a {
 	width: 10px;
 	background-color: red;
 }
+
+.row {
+	display: flex;
+	flex-wrap: wrap;
+}
+#mainContent, #sideContent {
+	height: 300px;
+}
+#mainContent {
+	width: 55%
+}
+
+#gapContent {
+	width:10%
+}
+
+#sideContent {
+	width: 35%;
+	border: 1px solid black;
+	border-radius: 5%;
+	padding: 10px 10px 10px 10px;
+	background-color: rgb(169,169,169);
+}
+
+.product-row .product-info{
+	float: left;
+	padding-right: 5px;
+}
+
+.product-row .product-info:last-of-type {
+	float: none;
+	display: inline;
+}
+
+.SearchBar {
+	padding: 20px 20px;
+	}
+	.SearchBar input[type="search"] {
+	width: 30%;
+	font-size: 18px;
+	}
+	.SearchResults ul li:hover {
+	background-color: rgb(211,211,211);
+	}
+	.SearchResults {
+	position: absolute;
+	z-index: 1000;
+	}
+	.SearchResults ul li a, a:hover, a:focus{
+	color: black;
+	text-decoration: none;
+	}
+	.SearchResults ul li{
+	width: 100%;
+	padding-left: 5px;
+	padding-top: 6px;
+	}
+	.SearchResults ul, li{
+	list-style-type: none; 
+	padding-left: 0px;
+	}

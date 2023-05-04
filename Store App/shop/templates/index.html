@@ -54,37 +54,6 @@ function GetSearch() {
 {% block styles %}
 {{super()}}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/productPage.css') }}">
-  <style>
-    .body {
-    }
-	.SearchBar {
-	padding: 20px 20px;
-	}
-	.SearchBar input[type="search"] {
-	width: 30%;
-	font-size: 18px;
-	}
-	.SearchResults ul li:hover {
-	background-color: rgb(211,211,211);
-	}
-	.SearchResults {
-	position: absolute;
-	z-index: 1000;
-	}
-	.SearchResults ul li a, a:hover, a:focus{
-	color: black;
-	text-decoration: none;
-	}
-	.SearchResults ul li{
-	width: 100%;
-	padding-left: 5px;
-	padding-top: 6px;
-	}
-	.SearchResults ul, li{
-	list-style-type: none; 
-	padding-left: 0px;
-	}
-  </style>
 {% endblock %}
 
 {% block navbar %}

@@ -2,7 +2,7 @@ from shop import app, db
 from .models import Product, User, Order, OrderItem, Customer
 from flask import render_template, flash, session, redirect, url_for, request, json
 from .form_helper import FormHelper
-from .forms import CheckoutForm, LoginForm, CreateAccountForm, EditProfileForm
+from .forms import *
 import os
 
 #PRODUCT_UPLOAD_FOLDER = 'static/product_pics'
@@ -162,6 +162,68 @@ def basket():
     
     return render_template("basket.html", basket=basket, total=total)
 
+@app.route('/checkout/info', methods=["GET", "POST"])
+def checkout_info():
+    form = CheckoutInfoForm(request.form)
+    if request.method == 'POST' and form.validate():
+        checkout_info = {"first_name":form.first_name.data, "surname":form.surname.data, "email":form.email.data, \
+                         "number":form.phone_number.data, "country":form.country.data, "address":form.address.data, \
+                         "apartment":form.apartment.data, "city":form.city.data, "postcode":form.postcode.data}
+        session["checkout_info"] = checkout_info
+        return redirect(url_for('checkout_shipping'))
+
+    basket = get_basket()
+    total = get_basket_total(basket)
+    
+    return render_template("checkout_info.html", form=form, basket=basket, total=total)
+
+@app.route('/checkout/shipping', methods=["GET", "POST"])
+def checkout_shipping():
+    form = CheckoutShippingForm(request.form)
+    if request.method == 'POST' and form.validate():
+        shipping_info = {"shipping_type": form.shipping_type.data}
+        session["checkout_shipping"] = shipping_info
+        return redirect(url_for('checkout_payment'))
+    
+    return render_template("checkout_shipping.html", form=form)
+
+@app.route('/checkout/payment', methods=["GET", "POST"])
+def checkout_payment():
+    form = CheckoutPaymentForm(request.form)
+    items = None
+    if request.method == 'POST' and form.validate():
+        checkout_payment = {"card_number":form.card_number.data, "name_on_card":form.name_on_card.data, "expiry_date":form.expiry_date.data, "csv":form.csv.data}
+        session["checkout_payment"] = checkout_payment
+        # Check that all the relevant info is available in session
+        # in case page is reached without previous steps
+        if {'checkout_info', 'checkout_shipping', 'checkout_payment'} <= set(session):
+            checkout_info = session['checkout_info']
+            checkout_shipping = session['checkout_shipping']
+            checkout_payment = session['checkout_payment']
+            if 'Basket' in session:
+                basket = session['Basket']
+                if len(basket) > 0:
+                    items = get_order_items(basket)
+            if 'logged' in session:
+                user = User.get_user_from_username(session['username'])
+                if user is not None:
+                    if items is not None:
+                        customer_id = Customer.add_customer(user.id, checkout_info['first_name'], checkout_info['surname'], checkout_info['email'], checkout_info['number'], checkout_info['address'], checkout_info['apartment'], checkout_info['country'], checkout_info['city'], checkout_info['postcode'], checkout_payment['card_number'], checkout_payment['name_on_card'], checkout_payment['expiry_date'], checkout_payment['csv'])
+                        Order.add_order(customer_id, items, checkout_shipping["shipping_type"])
+                        #order_id = Order.add_order(user.id, items)
+                        flash('Order successfull')
+                        return redirect(url_for('profile'))
+            else:
+                # If not logged in
+                if items is not None:
+                    customer_id = Customer.add_customer(None, checkout_info['first_name'], checkout_info['surname'], checkout_info['email'], checkout_info['number'], checkout_info['address'], checkout_info['apartment'], checkout_info['country'], checkout_info['city'], checkout_info['postcode'], checkout_payment['card_number'], checkout_payment['name_on_card'], checkout_payment['expiry_date'], checkout_payment['csv'])
+                    Order.add_order(customer_id, items, checkout_shipping["shipping_type"])
+                    flash('Order successfull')
+                    return redirect(url_for('index'))
+    
+    return render_template("checkout_payment.html", form=form)
+
+
 @app.route('/checkout', methods=["GET", "POST"])
 def checkout():
     form = CheckoutForm(request.form)
@@ -269,3 +331,11 @@ def profile():
         return render_template('profile.html', form=form, orders=orders, current_pic=current_pic, logged=("logged" in session))
         
     return redirect(url_for('login'))
+
+@app.route('/test', methods=['GET', 'POST'])
+def test():
+    form = CheckoutInfoForm(request.form)
+    if request.method == 'POST' and form.validate():
+        return redirect(url_for('checkout_shipping'))
+    return render_template('test.html', form=form)
+

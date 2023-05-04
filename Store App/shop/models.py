@@ -37,13 +37,32 @@ class User(db.Model):
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(32))
+    surname = db.Column(db.String(32))
+    email_address = db.Column(db.String(128))
+    phone_number = db.Column(db.Integer())
+    address_line_1 = db.Column(db.String(128))
+    address_line_2 = db.Column(db.String(64))
+    country = db.Column(db.String(64))
+    city = db.Column(db.String(32))
+    postcode = db.Column(db.String(7))
+
     card_number = db.Column(db.String(16))
+    name_on_card = db.Column(db.String(32))
+    expiry_date = db.Column(db.String(8))
+    csv = db.Column(db.String(3))
+    
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     order = db.relationship('Order', backref='customer', lazy=True)
 
-    def add_customer(card_number, user_id):
+    def add_customer(user_id, first_name, surname, email_address, phone_number, \
+                     address_line_1, address_line_2, country, city, postcode, \
+                     card_number, name_on_card, expiry_date, csv):
         if user_id is not None:
-            customer = Customer(card_number=card_number, user_id=user_id)
+            customer = Customer(user_id=user_id, first_name=first_name, surname=surname,\
+                                email_address=email_address, phone_number=phone_number, address_line_1=address_line_1,\
+                                address_line_2=address_line_2, country=country, city=city, postcode=postcode, \
+                                card_number=card_number, name_on_card=name_on_card, expiry_date=expiry_date, csv=csv)
         else:
             customer = Customer(card_number=card_number)
 
@@ -76,9 +95,11 @@ class Order(db.Model):
     #user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
     order_item = db.relationship('OrderItem', backref='order', lazy=True)
+    shipping_type = db.Column(db.String(32))
 
-    def add_order(customer_id, items):
-        order = Order(customer_id=customer_id)
+
+    def add_order(customer_id, items, shipping_type):
+        order = Order(customer_id=customer_id, shipping_type=shipping_type)
         db.session.add(order)
         db.session.commit()
         Order.add_order_items(order.id, items)
