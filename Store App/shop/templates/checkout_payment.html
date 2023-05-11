@@ -1,16 +1,16 @@
-{% extends "bootstrap/base.html" %}
+{% extends "layout.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}Paraphonealia{% endblock %}
 
 {% block styles %}
 {{super()}}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/productPage.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 {% endblock %}
 
 
 {% block navbar %}
-    <nav class="navbar navbar-inverse" role="navigation">
+    <nav class="navbar navbar-dark bg-dark" role="navigation">
         <div class="container">
 		<a class="navbar-brand" href="{{ url_for('index') }}">Shop</a>
 		<a class="navbar-brand" href="{{ url_for('basket') }}">Basket</a>
@@ -31,8 +31,8 @@
 		{{ render_field(form.expiry_date, class="form-control") }}
 		{{ render_field(form.csv, class="form-control") }}
 
-		<a href="/checkout/shipping" class="btn btn-info mt-2">Return to Shipping</a>
-		<input type=submit value="Pay" class="btn btn-info mt-2">
+		<a href="/checkout/shipping" class="btn btn-primary">Return to Shipping</a>
+		<input type=submit value="Pay" class="btn btn-primary">
 	</form>
 </div>
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "bootstrap/base.html" %}
+{% extends "layout.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}
@@ -7,11 +7,11 @@ Paraphonealia
 
 {% block styles %}
 {{super()}}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/productPage.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/basket.css') }}">
 {% endblock %}
 
 {% block navbar %}
-    <nav class="navbar navbar-inverse" role="navigation" style="margin-bottom: 0px;">
+    <nav class="navbar navbar-dark bg-dark" role="navigation">
         <div class="container">
 		<a class="navbar-brand" href="{{ url_for('index') }}">Shop</a>
 		<a class="navbar-brand" href="{{ url_for('basket') }}">Basket</a>
@@ -23,6 +23,95 @@ Paraphonealia
 {% endblock %}
 
 {% block content %}
+<section class="h-100 h-custom" style="background-color: #d2c9ff;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+          <div class="card-body p-0">
+            <div class="row g-0">
+              <div class="col-lg-8">
+                <div class="p-5">
+                  <div class="d-flex justify-content-between align-items-center mb-5">
+                    <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
+                    <h6 class="mb-0 text-muted">{{num_of_items}} items</h6>
+					<form method="post">
+						<input class="btn btn-primary" type ="submit" name="ClearBasket" value="Clear Basket">
+					</form>
+                  </div>
+                  <hr class="my-4">
+				{% for product, quantity in basket.items() %}
+                  <div class="row mb-4 d-flex justify-content-between align-items-center">
+                    <div class="col-md-2 col-lg-2 col-xl-2">
+                      <a href="productPage/{{product.id}}/{{product.name}}"><img
+                        src={{product.picture}}
+                        class="img-fluid rounded-3" alt={{product.name}}></a>
+                    </div>
+                    <div class="col-md-3 col-lg-3 col-xl-3">
+                      <h6 class="text-muted">Paraphonealia ltd</h6>
+                      <h6 class="text-black mb-0">{{product.name}}</h6>
+                    </div>
+					<div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+						<form method="post" name={{product.id}} class="row g-3">
+							<div class="col-md-6">
+								<input type="hidden" name="product_id" value={{product.id}}>
+								<select name="quantity" id="quantity">
+									{% for i in range(quantity, -1, -1) %}
+										<option value={{i}}>{{i}}</option>
+									{% endfor %}
+								</select> 
+							</div>
+							<div class="col-md-6">
+								<input type="submit" value="Save" name={{product.id}}>
+							</div>
+						</form >
+					</div>
+                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                      <h6 class="mb-0">£{{product.price}}</h6>
+                    </div>
+					<!--
+                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                      <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                    </div>
+					-->
+                  </div>
+				  {% endfor %}
+                  <hr class="my-4">
+
+                  <div class="pt-5">
+                    <h6 class="mb-0"><a href="{{ url_for('index') }}" class="black-link"><i class="fa fa-long-arrow-left"></i>Back to shop</a></h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 bg-grey">
+                <div class="p-5">
+                  <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                  <hr class="my-4">
+
+                  <div class="d-flex justify-content-between mb-4">
+                    <h5 class="text-uppercase">items {{num_of_items}}</h5>
+                    <h5>£ {{total}}</h5>
+                  </div>
+                  <hr class="my-4">
+
+                  <div class="d-flex justify-content-between mb-5">
+                    <h5 class="text-uppercase">Total price</h5>
+                    <h5>£ {{total}}</h5>
+                  </div>
+					{% if total != 0 %}
+						<a href="checkout/info" class="btn btn-primary">Continue to Checkout</a>
+					{% endif %}
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--
 <form method="post">
 <input type ="submit" name="ClearBasket" value="Clear Basket">
 </form>
@@ -46,5 +135,6 @@ Paraphonealia
 {% if total != 0 %}
 <a href="checkout/info" class="Button_link">Continue to Checkout</a>
 {% endif %}
+-->
 {% endblock %}
 

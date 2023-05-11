@@ -2,8 +2,21 @@ MID WAY THROUGH
 
 TODO
 
+FROM REVAMP 
+---------
+PRODUCT PAGE
+Add discount, description to product
+Add size field to orderItem and link to product page
+Either add extra images for products or remove extra images
 
-order has shipping/billing info
+BASKET
+maybe add the remove individual item button back
+
+PROFILE -DONE
+add item upload shit
+make order tiles
+---------
+
 
 Can change item quantity in basket from 0-10 then if more allows optional field to enter custom amount
 Checkout button takes you to page to fill in detail and OPTION to login
@@ -16,6 +29,7 @@ once "valid" details and buy pressed:
 
 
 DONE
+SEARCH RESULTS DIV DISPLAYS BORDER EVEN WHEN NOT CLICKING ON SEARCH BAR
 Add all account stuff from chatapp DONE
 If you set the quantity to 0 in the basket then remove it from the session basket entirely. 
 Display total basket cost
@@ -23,6 +37,7 @@ Button to clear basket
 Add href from name/picture that takes you to product page
 Add sort/search bar to main products page
 Add to basket functionality for each product page 
+order has shipping/billing info
 
 Order DB Stuff
 account links to orders table

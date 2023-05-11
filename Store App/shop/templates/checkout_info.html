@@ -1,16 +1,16 @@
-{% extends "bootstrap/base.html" %}
+{% extends "layout.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}Paraphonealia{% endblock %}
 
 {% block styles %}
 {{super()}}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/productPage.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 {% endblock %}
 
 
 {% block navbar %}
-    <nav class="navbar navbar-inverse" role="navigation">
+    <nav class="navbar navbar-dark bg-dark" role="navigation">
         <div class="container">
 		<a class="navbar-brand" href="{{ url_for('index') }}">Shop</a>
 		<a class="navbar-brand" href="{{ url_for('basket') }}">Basket</a>
@@ -24,7 +24,7 @@
 {% block content %}
 <div class="text-center h1 text-danger"> Info</div>
 <div class="container">
-	<div class="row">
+	<div class="custom-row">
 		<div class="col" id="mainContent">
 			{% from "_formhelpers.html" import render_field %}
 			<form method=post enctype="multipart/form-data" class="row g-3">
@@ -57,10 +57,10 @@
 				</div>
 				</br>
 				<div class="col-md-3">
-				<a href="/basket" class="btn btn-info mt-2">Return to cart</a>
+				<a href="/basket" class="btn btn-primary">Return to cart</a>
 				</div>
 				<div class="col-md-3 float-right">
-				<input type=submit value="Continue to Shipping" class="btn btn-info mt-2">
+				<input type=submit value="Continue to Shipping" class="btn btn-primary">
 				</div>
 			</form>
 		</div>

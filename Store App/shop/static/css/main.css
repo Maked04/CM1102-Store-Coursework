@@ -1,0 +1,87 @@
+#ProductColumn {
+  border: 5px solid;
+  border-top: none;
+  border-bottom: none;
+  margin: auto;
+  margin-top: none;
+  width: 50%;
+}
+
+#ProductColumn td {
+	padding: 10px;
+}
+
+a {
+	color: black;
+}
+
+.Button_link {
+	padding: 10px 10px;
+	border: 1px solid #696969;
+	background-color: #DCDCDC;
+	border-radius: 10%;
+}
+
+#ship {
+	padding: 10px 10px;
+	width: 10px;
+	background-color: red;
+}
+
+.custom-row {
+	display: flex;
+	flex-wrap: wrap;
+}
+#mainContent, #sideContent {
+	height: 300px;
+}
+#mainContent {
+	width: 55%
+}
+
+#gapContent {
+	width:10%
+}
+
+#sideContent {
+	width: 35%;
+	border: 1px solid black;
+	border-radius: 5%;
+	padding: 10px 10px 10px 10px;
+}
+
+.product-row .product-info{
+	float: left;
+	padding-right: 5px;
+}
+
+.product-row .product-info:last-of-type {
+	float: none;
+	display: inline;
+}
+
+.SearchResults ul li:hover {
+background-color: rgb(211,211,211);
+}
+.SearchResults {
+position: absolute;
+background-color: white;
+box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+z-index: 1000;
+}
+.SearchResults:empty {
+	display: none;
+}
+.SearchResults ul li a, a:hover, a:focus{
+color: black;
+text-decoration: none;
+}
+.SearchResults ul li{
+width: 100%;
+padding-left: 5px;
+padding-top: 6px;
+}
+.SearchResults ul, li{
+list-style-type: none; 
+padding-left: 0px;
+}
