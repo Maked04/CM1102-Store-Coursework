@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Paraphonealia{% endblock %}
 
 {% block styles %}
 {{super()}}
@@ -22,15 +21,13 @@
 {% endblock %}
 
 {% block content %}
-<div class="text-center h1 text-danger"> Shipping</div>
-<div class="container">
+<div class="text-center h1 text-danger">Shipping</div>
 	{% from "_formhelpers.html" import render_field %}
+	<div class="text-center">
 	<form method=post enctype="multipart/form-data">
-		<div class="form-check">
-			{{ render_field(form.shipping_type, class="form-check-input") }}
-		</div>
+		{{ render_field(form.shipping_type) }}
 		<a href="/checkout/info" class="btn btn-primary">Return to info</a>
 		<input type=submit value="Continue to Payment" class="btn btn-primary">
 	</form>
-</div>
+	</div>
 {% endblock %}

@@ -1,10 +1,6 @@
 {% extends "layout.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}
-Paraphonealia
-{% endblock %}
-
 {% block styles %}
 {{super()}}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/basket.css') }}">
@@ -69,11 +65,6 @@ Paraphonealia
                     <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                       <h6 class="mb-0">£{{product.price}}</h6>
                     </div>
-					<!--
-                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                      <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
-                    </div>
-					-->
                   </div>
 				  {% endfor %}
                   <hr class="my-4">
@@ -111,30 +102,5 @@ Paraphonealia
     </div>
   </div>
 </section>
-<!--
-<form method="post">
-<input type ="submit" name="ClearBasket" value="Clear Basket">
-</form>
-{% for product, quantity in basket.items() %}
-<a href="productPage/{{product.id}}/{{product.name}}"><h3> {{product.name}} </h3></a>
-<p> Price: £{{product.price}} </p>
-<a href="productPage/{{product.id}}/{{product.name}}"><img src={{ product.picture }} width=100px height=100px></a>
-<form method="post" name={{product.id}}>
-<input type="hidden" name="product_id" value={{product.id}}>
-<label for="quantity">Qty:</label>
-<select name="quantity" id="quantity">
-	{% for i in range(quantity, -1, -1) %}
-		<option value={{i}}>{{i}}</option>
-	{% endfor %}
-</select> 
-<input type="submit" value="Save" name={{product.id}}>
-</form >
-{% endfor %}
-
-<p> Basket Total: {{total}} </p>
-{% if total != 0 %}
-<a href="checkout/info" class="Button_link">Continue to Checkout</a>
-{% endif %}
--->
 {% endblock %}
 

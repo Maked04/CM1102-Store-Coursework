@@ -145,14 +145,16 @@ class Product(db.Model):
 restart = False
 #restart = True
 if restart:
+    #Product.__table__.drop(db.engine)
     db.drop_all()
+
 db.create_all()
 
 if restart:
-    Product.add_item("Brown Leather strap", 59, "/static/product_pics/Brown_Leather_Strap.jpg", "Crafted from the finest quality Italian Leather and lined with soft Nubuck, this Paraphonalia strap takes the Apple Watch to a whole new level of luxury and sophistication", "50% recyclable")
-    Product.add_item("Blue Watch Strap", 79, "/static/product_pics/Blue_Strap.jpg", "Modern and ultra-sleek. A unique spin on a 19th-century design that first originated in Milan, the Milanese Loop is infinitely adjustable to fit your wrist perfectly. Made from intricately woven stainless steel and fastened using a strong magnetic clasp, this strap takes seconds to put on or take off.", "100% Recyclable")
-    Product.add_item("Black Watch Strap", 49, "/static/product_pics/Black_Strap.jpg", "Modern and ultra-sleek. A unique spin on a 19th-century design that first originated in Milan, the Milanese Loop is infinitely adjustable to fit your wrist perfectly. Made from intricately woven stainless steel and fastened using a strong magnetic clasp, this strap takes seconds to put on or take off.", "100% Recyclable")
-    Product.add_item("Silver Link Watch Strap", 69, "/static/product_pics/Silver_Link_Strap.jpeg", "Crafted from 316L stainless steel and fastened using a hidden clasp, the link strap is designed to impress and built to last.", "Made from recycled metal")
+    Product.add_item("Brown Leather strap", 59, "/static/product_pics/Brown_Leather_Strap.png", "Crafted from the finest quality Italian Leather and lined with soft Nubuck, this Paraphonalia strap takes the Apple Watch to a whole new level of luxury and sophistication", "50% recyclable")
+    Product.add_item("Blue Watch Strap", 79, "/static/product_pics/Blue_Milan_Strap.png", "Modern and ultra-sleek. A unique spin on a 19th-century design that first originated in Milan, the Milanese Loop is infinitely adjustable to fit your wrist perfectly. Made from intricately woven stainless steel and fastened using a strong magnetic clasp, this strap takes seconds to put on or take off.", "100% Recyclable")
+    Product.add_item("Black Watch Strap", 49, "/static/product_pics/Black_Milan_Strap.png", "Modern and ultra-sleek. A unique spin on a 19th-century design that first originated in Milan, the Milanese Loop is infinitely adjustable to fit your wrist perfectly. Made from intricately woven stainless steel and fastened using a strong magnetic clasp, this strap takes seconds to put on or take off.", "100% Recyclable")
+    Product.add_item("Silver Link Watch Strap", 69, "/static/product_pics/Silver_Link_Strap.png", "Crafted from 316L stainless steel and fastened using a hidden clasp, the link strap is designed to impress and built to last.", "Made from recycled metal")
     Product.add_item("Green Air Conditoning Unit", 100, "/static/product_pics/Green_Air_Conditioning_Unit.png", "This compact air conditional unit will run directly from your power supply, the sleek design will cool your room in style!", "Produces clean air")
 
     

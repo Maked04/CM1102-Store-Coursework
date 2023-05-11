@@ -21,29 +21,7 @@
 {% endblock %}
 
 {% block content %}
-<!--
-    <h1>EDIT PROFILE</h1>
-	<div class="container" id="customer_orders">
-	<h3> Placed Orders </h3>
-	{% for order_id in orders.keys() %}
-    <h4> Order num: {{order_id}} </h4>
-    {% for product, quantity in orders[order_id].items() %}
-    <p> {{product.name}} x{{quantity}} </p>
-	{% endfor %}
-	{% endfor %}
-	</div>
-	
-	<h3> Current pic </h3>
-	<img src="static/profile_pics/{{ current_pic }}" width=170px height=170px>
-	{% from "_formhelpers.html" import render_field %}
-	<form method=post enctype="multipart/form-data" >
-		<div class="form-group">
-			{{ render_field(form.profile_pic) }}
-		</div>
-		</br>
-		<p><input type=submit value="Upload pic"></p>
-	</form>
-	-->
+
 <section class="h-100 gradient-custom-2">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -62,15 +40,17 @@
           </div>
           <div class="p-4 text-black" style="background-color: #f8f9fa;">
             <div class="d-flex justify-content-end text-center py-1">
+			<a class="btn btn-primary" href="{{ url_for('logout') }}">Logout</a>
             </div>
           </div>
           <div class="card-body p-4 text-black">
             <div class="mb-5">
               <p class="lead fw-normal mb-1">Edit Profile</p>
               <div class="p-4" style="background-color: #f8f9fa;">
+			  {% from "_formhelpers.html" import render_field %}
                 <form method=post enctype="multipart/form-data">
-						{{ render_field(form.profile_pic) }}
-						<p><input type=submit value="Upload pic"></p>
+					{{ render_field(form.profile_pic) }}
+					<p><input type=submit value="Upload pic"></p>
 				</form>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -102,29 +82,7 @@
 					</div>
 				</div>
 				{% endfor %}
-			</div>
-			<!--
-            <div class="row g-2">
-              <div class="col mb-2">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
-                  alt="image 1" class="w-100 rounded-3">
-              </div>
-              <div class="col mb-2">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(107).webp"
-                  alt="image 1" class="w-100 rounded-3">
-              </div>
-            </div>
-            <div class="row g-2">
-              <div class="col">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(108).webp"
-                  alt="image 1" class="w-100 rounded-3">
-              </div>
-              <div class="col">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp"
-                  alt="image 1" class="w-100 rounded-3">
-              </div>
-            </div>
-			-->
+			</div>			
           </div>
         </div>
       </div>

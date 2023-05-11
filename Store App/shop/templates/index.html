@@ -1,10 +1,6 @@
 {% extends "layout.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}
-Paraphonealia
-{% endblock %}
-
 {% block scripts %}
 <script>
 function createRecommendation(product) {
@@ -100,23 +96,13 @@ function GetSearch() {
 						<input type="number" name="quantity" min=1 required>
 						<input class="btn btn-primary" type="submit" value="Add To Basket" name={{product.id}}>
 					</form>
-					<!-- <a href="#" class="float-left btn btn-sm btn-primary">Details</a>
-					<a href="#" class="float-right btn btn-sm btn-warning"> Add to Cart </a>
-					-->
-					<!--
-					<form method="post">
-						<input type="hidden" name="product_id" value={{product.id}}>
-						<label for="quantity">Quantity</label>
-						<input type="number" name="quantity" min=1 required>
-						<input type="submit" value="Add To Basket" name={{product.id}}>
-					</form>
-					-->
 				</div>
 			</div>
 		</div>
 		{% endfor %}
 	</div>
 </div>
+<div class="text-center h1 text-danger">ADVERTS</div>
 <img src="\static\advert_pics\car_rental_banner.jpg" style="width: 100%; height:auto">
 <img src="\static\advert_pics\fishing_gear_banner.png" style="width: 100%; height:auto">
 

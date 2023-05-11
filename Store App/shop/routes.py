@@ -81,7 +81,6 @@ def index():
     if 'Basket' not in session:
         session['Basket'] = {}
     if request.method == "POST":
-        print(request.form)
         if 'SortBar' in request.form:
             apply_sort = True
             sort_type = request.form['SortBar']
@@ -107,13 +106,17 @@ def index():
         elif sort_type == "Name":
             products = Product.query.order_by(Product.name).all()
     elif apply_search:
-        print("here")
         products = Product.query.filter(Product.name.ilike("%"+search_query+"%"))
-        print("products: ",products)
     else:
         products = Product.query.all()
     return render_template("index.html", products=products)
 
+
+@app.route('/logout')
+def logout():
+    session.pop('logged')
+    return redirect(url_for('index'))
+    
 @app.route('/search/<query>')
 def search(query):
     #points = {"products": [{"name": product} for product in products if query.lower() in product.lower()]}
@@ -229,36 +232,6 @@ def checkout_payment():
     
     return render_template("checkout_payment.html", form=form)
 
-
-@app.route('/checkout', methods=["GET", "POST"])
-def checkout():
-    form = CheckoutForm(request.form)
-    items = None
-    if request.method == 'POST' and form.validate():
-        if 'Basket' in session:
-            basket = session['Basket']
-            if len(basket) > 0:
-                items = get_order_items(basket)
-        if 'logged' in session:
-            user = User.get_user_from_username(session['username'])
-            if user is not None:
-                if items is not None:
-                    customer_id = Customer.add_customer(form.card_number.data, user.id)
-                    Order.add_order(customer_id, items)
-                    #order_id = Order.add_order(user.id, items)
-                    flash('Order successfull')
-                    return redirect(url_for('profile'))
-        else:
-            # If not logged in
-            if items is not None:
-                customer_id = Customer.add_customer(form.card_number.data, None)
-                Order.add_order(customer_id, items)
-                                        
-    basket = get_basket()
-    total = get_basket_total(basket)
-    
-    return render_template("checkout.html", basket=basket, total=total, form=form)
-
 # ACCOUNT RELATED ROUTES
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -337,46 +310,4 @@ def profile():
         return render_template('profile.html', form=form, orders=orders, current_pic=current_pic, logged=("logged" in session), user=user)
         
     return redirect(url_for('login'))
-
-@app.route('/test', methods=['GET', 'POST'])
-def test():
-    apply_sort = False
-    apply_search = False
-    sort_type = None
-    search_query = None
-    if 'Basket' not in session:
-        session['Basket'] = {}
-    if request.method == "POST":
-        print(request.form)
-        if 'SortBar' in request.form:
-            apply_sort = True
-            sort_type = request.form['SortBar']
-        elif 'SearchInput' in request.form:
-            apply_search = True
-            search_query = request.form['SearchInput']
-        else:
-            quantity, product_id = None, None
-            if 'quantity' in request.form:
-                quantity = request.form['quantity']
-            if 'product_id' in request.form:
-                product_id = request.form['product_id']
-            if quantity is not None and product_id is not None:
-                if product_id in session['Basket']:
-                    session['Basket'][product_id] = int(session['Basket'][product_id]) + int(quantity)
-                else:
-                    session['Basket'][product_id] = quantity
-    if apply_sort:
-        if sort_type == "Price":
-            products = Product.query.order_by(Product.price).all()
-        elif sort_type == "Standard":
-            products = Product.query.all()
-        elif sort_type == "Name":
-            products = Product.query.order_by(Product.name).all()
-    elif apply_search:
-        print("here")
-        products = Product.query.filter(Product.name.ilike("%"+search_query+"%"))
-        print("products: ",products)
-    else:
-        products = Product.query.all()
-    return render_template("test.html", products=products)
 

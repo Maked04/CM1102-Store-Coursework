@@ -2,21 +2,6 @@ MID WAY THROUGH
 
 TODO
 
-FROM REVAMP 
----------
-PRODUCT PAGE
-Add discount, description to product
-Add size field to orderItem and link to product page
-Either add extra images for products or remove extra images
-
-BASKET
-maybe add the remove individual item button back
-
-PROFILE -DONE
-add item upload shit
-make order tiles
----------
-
 
 Can change item quantity in basket from 0-10 then if more allows optional field to enter custom amount
 Checkout button takes you to page to fill in detail and OPTION to login

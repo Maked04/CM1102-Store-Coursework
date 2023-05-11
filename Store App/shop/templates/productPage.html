@@ -11,8 +11,8 @@ Paraphonealia
 {% endblock %}
 
 {% block scripts %}
-<!--
-<script>#
+
+<script>
 function change_image(image){
                  var container = document.getElementById("main-image");
 
@@ -21,7 +21,6 @@ function change_image(image){
             document.addEventListener("DOMContentLoaded", function(event) {
             });
 </script>
--->
 {% endblock %}
 
 {% block navbar %}
@@ -46,10 +45,9 @@ function change_image(image){
                         <div class="images p-3">
                             <div class="text-center p-4"> <img id="main-image" src="{{ product.picture }}" width="250" /> </div>
                             <div class="thumbnail text-center"> 
-							<!--
-								<img onclick="change_image(this)" src="https://i.imgur.com/Rx7uKd0.jpg" width="70"> 
-								<img onclick="change_image(this)" src="https://i.imgur.com/Dhebu4F.jpg" width="70"> 
-								-->
+								<img onclick="change_image(this)" src="{{ product.picture }}" width="70">
+								<img onclick="change_image(this)" src="\static\advert_pics\car_rental_banner.jpg" width="70">
+								<img onclick="change_image(this)" src="\static\advert_pics\fishing_gear_banner.png" width="70">
 							</div>
                         </div>
                     </div>
